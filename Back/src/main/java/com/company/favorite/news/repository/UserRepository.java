@@ -1,0 +1,8 @@
+package com.company.favorite.news.repository;
+
+import com.company.favorite.news.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+}

@@ -1,0 +1,104 @@
+<div>
+  <h2 class="mb-3">Favorite News Management</h2>
+  <form>
+    <div class="mb-3 row">
+      <label
+        for="table-complete-search"
+        class="col-xs-3 col-sm-auto col-form-label"
+        >Search Favorite News:</label
+      >
+      <div class="col-xs-3 col-sm-auto">
+        <input
+          id="table-complete-search"
+          type="text"
+          class="form-control"
+          name="searchTerm"
+          [(ngModel)]="service.searchTerm"
+        />
+      </div>
+      @if (service.loading$ | async) {
+      <span class="col col-form-label">Loading...</span>
+      }
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr class="table-primary">
+            <th scope="col" sortable="externalId" (sort)="onSort($event)">#</th>
+            <th scope="col" sortable="title" (sort)="onSort($event)">Title</th>
+            <th scope="col" sortable="summary" (sort)="onSort($event)">
+              Summary
+            </th>
+            <th scope="col" sortable="publishedAt" (sort)="onSort($event)">
+              Published At
+            </th>
+            <th scope="col" sortable="favoriteAt" (sort)="onSort($event)">
+              Favorite At
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (news of newsList$ | async; track news.externalId) {
+          <tr>
+            <td>
+              <ngb-highlight
+                [result]="news.externalId.toString()"
+                [term]="service.searchTerm"
+              />
+            </td>
+            <td>
+              <a [href]="news.description"
+                ><ngb-highlight
+                  [result]="news.title"
+                  [term]="service.searchTerm"
+                />
+              </a>
+            </td>
+            <td>
+              <ngb-highlight
+                [result]="news.summary"
+                [term]="service.searchTerm"
+              />
+            </td>
+            <td>
+              <ngb-highlight
+                [result]="formatDate(news.publishedAt)"
+                [term]="service.searchTerm"
+              />
+            </td>
+            <td>
+              <ngb-highlight
+                [result]="formatDate(news.favoriteAt)"
+                [term]="service.searchTerm"
+              />
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="5" style="text-align: center">No News found</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination
+        [collectionSize]="(total$ | async)!"
+        [(page)]="service.page"
+        [pageSize]="service.pageSize"
+      >
+      </ngb-pagination>
+
+      <select
+        class="form-select"
+        style="width: auto"
+        name="pageSize"
+        [(ngModel)]="service.pageSize"
+      >
+        <option [ngValue]="5">5 news per page</option>
+        <option [ngValue]="10">10 news per page</option>
+      </select>
+    </div>
+  </form>
+</div>

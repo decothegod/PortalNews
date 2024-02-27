@@ -1,0 +1,288 @@
+openapi: 3.0.1
+info:
+  title: News Favorite API
+  version: 0.0.1-SNAPSHOT
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /v1/newsFavorite:
+    get:
+      tags:
+      - news-controller
+      summary: Get all Favorite News
+      description: Retrieves the complete list of Favorite News.
+      operationId: getAllFavoriteNews
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsDTO'
+        "200":
+          description: "Success, returns the list of Favorite News. If there are no\
+            \ Favorite News, it returns an empty list."
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsDTO'
+    post:
+      tags:
+      - news-controller
+      summary: Add a new Favorite News
+      description: "Register a new Favorite News with the information provided.if\
+        \ the Favorite News already register, only add the User"
+      operationId: addFavoriteNews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestDTO'
+        required: true
+      responses:
+        "404":
+          description: "Not found, User not found."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+        "400":
+          description: Bad Request.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+        "200":
+          description: "Success, returns the registered Favorite News."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+  /v1/newsFavorite/{externalId}:
+    get:
+      tags:
+      - news-controller
+      summary: Get all Favorite News by External ID
+      description: Retrieves a Favorite News by its External ID.
+      operationId: getNewsByID
+      parameters:
+      - name: externalId
+        in: path
+        description: "The external identifier code, provide https://api.spaceflightnewsapi.net/v4/articles\
+          \ api"
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 22698
+      responses:
+        "404":
+          description: "Not found, Favorite News not found."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        "200":
+          description: "Success, return the Favorite News."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+  /v1/newsFavorite/ByUser/{userId}:
+    get:
+      tags:
+      - news-controller
+      summary: Get all Favorite News by User ID
+      description: Retrieves a Favorite News by its User ID.
+      operationId: getNewsByUser
+      parameters:
+      - name: userId
+        in: path
+        description: The user identifier code
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        "404":
+          description: "Not found, User not found."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        "200":
+          description: "Success, return the Favorite News."
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsDTO'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsDTO'
+  /v1/newsFavorite/ByTitle/{title}:
+    get:
+      tags:
+      - news-controller
+      summary: Get all Favorite News by Title
+      description: Retrieves a Favorite News by its Title.
+      operationId: getNewsByUser_1
+      parameters:
+      - name: title
+        in: path
+        description: 'The News'' Title '
+        required: true
+        schema:
+          type: string
+        example: Lorem ipsum
+      responses:
+        "404":
+          description: "Not found, Favorite News not found."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        "200":
+          description: "Success, return the Favorite News."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+  /v1/newsFavorite/{externalId}&{userId}:
+    delete:
+      tags:
+      - news-controller
+      summary: Delete User of a Favorite News
+      description: Delete a User of Favorite News with the information provided.
+      operationId: deleteFavorite
+      parameters:
+      - name: externalId
+        in: path
+        description: "The external identifier code, provide https://api.spaceflightnewsapi.net/v4/articles\
+          \ api"
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 22698
+      - name: userId
+        in: path
+        description: The user identifier code
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        "404":
+          description: "Not found, User or Favorite News  not found."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+        "200":
+          description: "Success, returns the delete Favorite News."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NewsDTO'
+components:
+  schemas:
+    ErrorResponseDTO:
+      type: object
+      properties:
+        message:
+          type: string
+    RequestDTO:
+      type: object
+      properties:
+        externalId:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+        summary:
+          type: string
+        publishedAt:
+          type: string
+          format: date-time
+        favoriteAt:
+          type: string
+          format: date-time
+        userId:
+          type: integer
+          format: int64
+    NewsDTO:
+      type: object
+      properties:
+        externalId:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+        summary:
+          type: string
+        publishedAt:
+          type: string
+          format: date-time
+        favoriteAt:
+          type: string
+          format: date-time
+        usersMarkFavorite:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDTO'
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string

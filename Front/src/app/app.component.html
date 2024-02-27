@@ -1,0 +1,32 @@
+<nav
+  class="navbar navbar-expand-lg bg-body-tertiary fixed-top bg-primary-subtle"
+>
+  <div class="container-fluid">
+    {{ title }}
+  </div>
+</nav>
+<div class="container-fluid" style="margin-top: 50px">
+  <div class="row">
+    <div class="col-md-2">
+      <app-user></app-user>
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="top">
+            <app-news></app-news>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bottom">
+            <app-favorite-news></app-favorite-news>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <router-outlet /> -->
